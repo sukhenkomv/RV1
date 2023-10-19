@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 
-class CustomRecyclerAdapter(private val names: List<String>, val span_count: Int) :
+class CustomRecyclerAdapter(private val names: List<String>, private val spanCount: Int) :
     RecyclerView.Adapter<CustomRecyclerAdapter.MyViewHolder>() {
 
-    var selectedIdx = 0
+    private var selectedIdx = 0
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -23,19 +24,19 @@ class CustomRecyclerAdapter(private val names: List<String>, val span_count: Int
                 recyclerView.layoutManager?.let { lm ->
                     if (keyEvent.action == KeyEvent.ACTION_DOWN) {
                         if (keyEvent.keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                            result = tryMoveSelection(lm, span_count)
+                            result = tryMoveSelection(lm, spanCount)
                         }
                         if (keyEvent.keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                            result = tryMoveSelection(lm, -span_count)
+                            result = tryMoveSelection(lm, -spanCount)
                         }
                         if (keyEvent.keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                             result = tryMoveSelection(lm, -1)
                         }
                         if (keyEvent.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                            result = tryMoveSelection(lm,1)
+                            result = tryMoveSelection(lm, 1)
                         }
                         if (result) {
-                            recyclerView.scrollToPosition(selectedIdx)
+                            recyclerView.smoothScrollToPosition(selectedIdx)
                         }
                     }
                 }
@@ -49,6 +50,16 @@ class CustomRecyclerAdapter(private val names: List<String>, val span_count: Int
         val newSelectedIdx = selectedIdx + direction
         if (newSelectedIdx < 0 || newSelectedIdx >= names.size) {
             return false
+        }
+        if (lm is GridLayoutManager) {
+            val fvp = lm.findFirstVisibleItemPosition()
+            val lvp = lm.findLastVisibleItemPosition()
+            if (fvp != RecyclerView.NO_POSITION && newSelectedIdx < (fvp - spanCount)) {
+                return false
+            }
+            if (lvp != RecyclerView.NO_POSITION && newSelectedIdx > (lvp + spanCount)) {
+                return false
+            }
         }
         selectedIdx = newSelectedIdx
         notifyItemChanged(prevSelectedIdx);
