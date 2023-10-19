@@ -1,31 +1,35 @@
 package com.example.rv1
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        const val SPAN_COUNT = 3
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = CustomRecyclerAdapter(getCatList())
+        recyclerView.layoutManager = GridLayoutManager(this, SPAN_COUNT)
+        recyclerView.adapter = CustomRecyclerAdapter(getCatList(), SPAN_COUNT)
 
         recyclerView.requestFocus()
     }
 
-    private fun fillist(): List<String> {
-        val data = mutableListOf<String>()
-        (0..30).forEach{
-            data.add("$it element")
-        }
-        return data
-    }
-
     private fun getCatList(): List<String> {
-        return this.resources.getStringArray(R.array.cat_names).toList()
+        val res = mutableListOf<String>()
+        val cats = this.resources.getStringArray(R.array.cat_names).toList()
+        for (i in 1..10) {
+            for (cat in cats) {
+                res.add("$cat $i")
+            }
+        }
+        return res
     }
 }
