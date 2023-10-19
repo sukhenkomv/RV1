@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 
 
 class CustomRecyclerAdapter(private val names: List<String>, val span_count: Int) :
@@ -32,7 +34,10 @@ class CustomRecyclerAdapter(private val names: List<String>, val span_count: Int
                             result = tryMoveSelection(lm, -1)
                         }
                         if (keyEvent.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                            result = tryMoveSelection(lm,1)
+                            result = tryMoveSelection(lm, 1)
+                        }
+                        if (result) {
+                            recyclerView.smoothScrollToPosition(selectedIdx)
                         }
                     }
                 }
@@ -41,16 +46,19 @@ class CustomRecyclerAdapter(private val names: List<String>, val span_count: Int
         }
     }
 
-    private fun tryMoveSelection(lm: RecyclerView.LayoutManager, direction: Int): Boolean {
+    private fun tryMoveSelection(lm: LayoutManager, direction: Int): Boolean {
         val prevSelectedItem = selectedIdx
         val newSelectedIdx = selectedIdx + direction
         if (newSelectedIdx < 0 || newSelectedIdx >= names.size) {
             return false
         }
+        if (lm is LinearLayoutManager && (selectedIdx < lm.findFirstVisibleItemPosition() || selectedIdx > lm.findLastVisibleItemPosition())) {
+            return false
+        }
+
         selectedIdx = newSelectedIdx
         notifyItemChanged(prevSelectedItem);
         notifyItemChanged(selectedIdx);
-        lm.scrollToPosition(selectedIdx);
         return true
     }
 

@@ -17,7 +17,10 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = SpeedyLinearLayoutManager(this)
+
         recyclerView.adapter = CustomRecyclerAdapter(getCatList(), SPAN_COUNT)
 
         recyclerView.requestFocus()
