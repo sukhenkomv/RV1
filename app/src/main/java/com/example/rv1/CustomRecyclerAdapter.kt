@@ -34,6 +34,9 @@ class CustomRecyclerAdapter(private val names: List<String>, val span_count: Int
                         if (keyEvent.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                             result = tryMoveSelection(lm,1)
                         }
+                        if (result) {
+                            recyclerView.scrollToPosition(selectedIdx)
+                        }
                     }
                 }
             }
@@ -42,15 +45,14 @@ class CustomRecyclerAdapter(private val names: List<String>, val span_count: Int
     }
 
     private fun tryMoveSelection(lm: RecyclerView.LayoutManager, direction: Int): Boolean {
-        val prevSelectedItem = selectedIdx
+        val prevSelectedIdx = selectedIdx
         val newSelectedIdx = selectedIdx + direction
         if (newSelectedIdx < 0 || newSelectedIdx >= names.size) {
             return false
         }
         selectedIdx = newSelectedIdx
-        notifyItemChanged(prevSelectedItem);
+        notifyItemChanged(prevSelectedIdx);
         notifyItemChanged(selectedIdx);
-        lm.scrollToPosition(selectedIdx);
         return true
     }
 
