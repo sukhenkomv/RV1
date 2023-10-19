@@ -3,14 +3,13 @@ package com.example.rv1
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnKeyListener
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class CustomRecyclerAdapter(private val names: List<String>) :
+class CustomRecyclerAdapter(private val names: List<String>, val span_count: Int) :
     RecyclerView.Adapter<CustomRecyclerAdapter.MyViewHolder>() {
 
     var selectedIdx = 0
@@ -24,10 +23,16 @@ class CustomRecyclerAdapter(private val names: List<String>) :
                 recyclerView.layoutManager?.let { lm ->
                     if (keyEvent.action == KeyEvent.ACTION_DOWN) {
                         if (keyEvent.keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                            result = tryMoveSelection(lm, 1)
+                            result = tryMoveSelection(lm, span_count)
                         }
                         if (keyEvent.keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                            result = tryMoveSelection(lm, -span_count)
+                        }
+                        if (keyEvent.keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                             result = tryMoveSelection(lm, -1)
+                        }
+                        if (keyEvent.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                            result = tryMoveSelection(lm,1)
                         }
                     }
                 }
@@ -50,9 +55,8 @@ class CustomRecyclerAdapter(private val names: List<String>) :
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val largeTextView: TextView = itemView.findViewById(R.id.textViewLarge)
-        val smallTextView: TextView = itemView.findViewById(R.id.textViewSmall)
-        val mainLinearLayout: LinearLayout = itemView.findViewById(R.id.mainLl)
+        val catNameTextView: TextView = itemView.findViewById(R.id.catNameTv)
+        val mainCv: CardView = itemView.findViewById(R.id.mainCv)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -65,8 +69,7 @@ class CustomRecyclerAdapter(private val names: List<String>) :
     override fun getItemCount() = names.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.mainLinearLayout.isSelected = position == selectedIdx
-        holder.largeTextView.text = names[position]
-        holder.smallTextView.text = "кот"
+        holder.mainCv.isSelected = position == selectedIdx
+        holder.catNameTextView.text = names[position]
     }
 }
