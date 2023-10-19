@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">RV1</string>
+
+    <string-array name="cat_names">
+        <item>Рыжик</item>
+        <item>Барсик</item>
+        <item>Мурзик</item>
+        <item>Мурка</item>
+        <item>Васька</item>
+        <item>Томасина</item>
+        <item>Кристина</item>
+        <item>Пушок</item>
+        <item>Дымка</item>
+        <item>Кузя</item>
+        <item>Китти</item>
+        <item>Масяня</item>
+        <item>Симба</item>
+
+        <item>Рыжик2</item>
+        <item>Барсик2</item>
+        <item>Мурзик2</item>
+        <item>Мурка2</item>
+        <item>Васька2</item>
+        <item>Томасина2</item>
+        <item>Кристина2</item>
+        <item>Пушок2</item>
+        <item>Дымка2</item>
+        <item>Кузя2</item>
+        <item>Китти2</item>
+        <item>Масяня2</item>
+        <item>Симба2</item>
+    </string-array>
+</resources>
